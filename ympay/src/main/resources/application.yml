@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://ymbok.com:3306/ympay?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: ympay
-    password: 8S4mjnrsm57XnLWj
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
 server:
