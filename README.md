@@ -1,4 +1,4 @@
-# ym_payment 
+# ympay
 
 SpringBoot实现的支付宝当面付充值系统（可用于网站充值，游戏内充） 
 
@@ -10,7 +10,8 @@ SpringBoot实现的支付宝当面付充值系统（可用于网站充值，游�
 支付完成后回调到你的游戏服务器进行自动元宝的发放，并在你的数据库里记录了你 
 的玩家充值流水。拥有自己的充值系统，不用担心平台倒闭和跑路。 
 
-### 打包分离配置文件pom.xml增加 
+### 打包分离配置文件pom.xml增加  
+```xml
 <resource> 
     <!-- 分离配置文件打包--> 
    <directory>src/main/resources</directory> 
@@ -19,11 +20,11 @@ SpringBoot实现的支付宝当面付充值系统（可用于网站充值，游�
        <exclude>**/*.yml</exclude> 
    </excludes> 
 </resource> 
+```
 
-
-### Linux部署： 
-网站包含：config目录和执行jar文件 
-config目录包含：application.yml config.properties 
+### Linux部署：  
+网站包含：config目录和执行jar文件  
+config目录包含：application.yml config.properties  
 
 将config目录和jar拷贝到你的/www/wwwroot/ympay目录 
 cd /www/wwwroot/ympay
