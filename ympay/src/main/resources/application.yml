@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: ympay
+  profiles:
+    active: dev
+  #数据源配置
+  datasource:
+    url: jdbc:mysql://ymbok.com:3306/ympay?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: ympay
+    password: 8S4mjnrsm57XnLWj
+    driver-class-name: com.mysql.jdbc.Driver
+
+server:
+  port: 8090
+
+## Mybatis 配置
+mybatis:
+  type-aliases-package: com.ymbok.pay.domain
+  mapper-locations: classpath:com/ymbok/pay/dao/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+#eureka.client.service-url.defaultzone:http://localhost:8761/eureka/
+#eureka.instance.leaseRenewalIntervalInSeconds:30
+
+
+#日志监测路径
+logging:
+  level:
+    com.ym.payment: debug
+    org.springframework: debug
+
+  #日志存储路径
+  path: ./logs/
+  #文件名
+  file: ympay_

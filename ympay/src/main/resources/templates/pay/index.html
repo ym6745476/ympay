@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>支付宝支付</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link type="text/css" th:href="@{/libs/mint-ui/style.css}"  rel="stylesheet">
+    <link type="text/css" th:href="@{/libs/bootstrap/bootstrap.min.css}"  rel="stylesheet">
+    <link type="text/css" th:href="@{/css/style.css}"  rel="stylesheet">
+
+    <style>
+        template {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="userId" th:value="${userId}"/>
+    <input type="hidden" id="userName" th:value="${userName}"/>
+    <input type="hidden" id="roleId" th:value="${roleId}"/>
+    <input type="hidden" id="roleName" th:value="${roleName}"/>
+    <input type="hidden" id="serverId" th:value="${serverId}"/>
+    <input type="hidden" id="appId" th:value="${appId}"/>
+    <input type="hidden" id="goodsId" th:value="${goodsId}"/>
+    <input type="hidden" id="totalAmount" th:value="${totalAmount}"/>
+
+    <div id="app">
+        <keep-alive :include="cacheComponents">
+            <router-view></router-view>
+        </keep-alive>
+    </div>
+    <template id="pay-template">
+        <div class="container">
+            <mt-header fixed title="收银台" class="mint-header-light">
+                <mt-button icon="back" @click.native="back();" slot="left"></mt-button>
+            </mt-header>
+            <div class="pay_index content my-3">
+                <div class="d-flex flex-column align-items-center">
+
+                    <div class="d-flex flex-row align-items-center">
+                        <img src="../../images/alipay.gif" width="36" height="36"/>
+                        <div class="mx-3">支付宝</div>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center" v-if="appId > 1000">
+                        <div class="mx-3">游戏充值参数</div>
+                        <mt-field class="my-3" label="分区ID：" placeholder="请输入分区ID" v-model="serverId"></mt-field>
+                        <mt-field class="my-3" label="角色ID：" placeholder="请输入角色ID" v-model="roleId"></mt-field>
+                        <mt-field class="my-3" label="角色名：" placeholder="请输入角色名" v-model="roleName"></mt-field>
+                    </div>
+
+                    <mt-radio class="pay_list"
+                            title="请选择要充值的金额"
+                            v-model="totalAmount"
+                            :options="options">
+                    </mt-radio>
+
+                    <div class="pay_amount">
+                        待付款：<span class="money">¥{{totalAmount}}</span>
+                    </div>
+
+                    <div class="button_long my-3">
+                        <mt-button type="primary" size="large" @click.native="pay">立即付款</mt-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="code-template">
+        <div class="container">
+            <mt-header fixed title="收银台" class="mint-header-light">
+                <mt-button icon="back" @click.native="back();" slot="left"></mt-button>
+            </mt-header>
+            <div class="pay_code content my-3">
+                <div class="d-flex flex-column align-items-center">
+                    <img src="images/alipay.jpg" width="130" height="38">
+
+                    <div id="qrCode" class="my-3">
+
+                    </div>
+
+                    <div>
+                        <div v-if="codeResult && codeResult.qrCode == null" class="my-3 money">软件使用时间到期，请联系QQ396196516更新程序</div>
+                        <div v-else class="my-3" >请用支付宝扫描二维码完成支付</div>
+                    </div>
+
+                    <div class="pay_time">
+                        <div class="title color_green"
+                             v-if="tradeResult && (tradeResult.tradeStatus == 'TRADE_SUCCESS')">支付成功</div>
+                        <div class="title" v-else>等待支付</div>
+                        <div class="d-flex flex-row time" v-if="tradeResult && (tradeResult.tradeStatus == 'TRADE_SUCCESS')">
+                            <strong>3秒后关闭...</strong>
+                        </div>
+                        <div class="d-flex flex-row time" v-else>
+                            <strong>{{hour}}时</strong>
+                            <strong>{{minute}}分</strong>
+                            <strong>{{second}}秒</strong>
+                        </div>
+                    </div>
+
+                    <div class="order_info card_view" v-if="codeResult">
+                        <div class="d-flex flex-row align-items-start">
+                            <div class="title">订单信息</div>
+                            <div class="info">
+                                <p>商品：{{codeResult.subject}}</p>
+                                <p>金额：<span class="money">¥{{codeResult.totalAmount}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-primary d-flex align-items-center" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        <div class="mx-3">
+                            手机用户可保存上方二维码到手机中,在支付宝扫一扫中选择“相册”即可
+                        </div>
+                    </div>
+
+                    <div class="button_long my-3" v-if="tradeResult && (tradeResult.tradeStatus == 'WAIT_BUYER_PAY')">
+                        <mt-button type="primary" size="large" @click.native="cancel">取消订单</mt-button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+
+</body>
+
+<script type="text/javascript" th:src="@{/libs/vue/vue.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/request.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/vue-router.min.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/vuex.min.js}"></script>
+<script type="text/javascript" th:src="@{/libs/mint-ui/index.js}"></script>
+
+<script type="text/javascript" th:src="@{/libs/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/qrcode.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/util.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js?v=1}"></script>
+</html>

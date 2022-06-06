@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ymbok.pay.dao.PayDao">
+
+	<sql id="BaseColumnList">
+		id,user_id,user_name,subject,role_id,role_name,server_id,app_id,goods_id,out_trade_no, total_amount, trade_status,trade_no,
+		buyer_logon_id, buyer_pay_amount, send_pay_date,notify_status,notify_response,
+		create_time,update_time
+	</sql>
+
+	<select id="findAllPay" resultType="PayEntity" >
+		select
+		<include refid="BaseColumnList" />
+		from pay_order
+		order by create_time desc
+	</select>
+
+	<select id="findPayById" resultType="PayEntity" parameterType="java.lang.String">
+		select
+		<include refid="BaseColumnList" />
+		from pay_order
+		where out_trade_no = #{out_trade_no}
+	</select>
+
+	<select id="findWaitPay" resultType="PayEntity">
+		select
+		<include refid="BaseColumnList" />
+		from pay_order
+		where (trade_status = 'WAIT_BUYER_PAY' or (trade_status = 'TRADE_SUCCESS' and notify_status= 0))
+		and create_time > DATE_ADD(NOW(), INTERVAL -10 MINUTE)
+	</select>
+
+	<insert id="savePay" parameterType="PayEntity">
+
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			select count(*) as count from pay_order WHERE out_trade_no = #{outTradeNo}
+		</selectKey>
+
+		<if test="count>0">
+			update
+			pay_order
+			set
+			total_amount = #{totalAmount},
+			trade_status = #{tradeStatus},
+			trade_no = #{tradeNo},
+
+			buyer_logon_id = #{buyerLogonId},
+			buyer_pay_amount = #{buyerPayAmount},
+			send_pay_date = #{sendPayDate},
+			update_time = now()
+			where
+			out_trade_no = #{outTradeNo}
+		</if>
+
+		<if test="count==0">
+			insert into
+			pay_order(user_id,user_name,role_id,role_name,server_id,subject,app_id,goods_id,out_trade_no, total_amount, trade_status,trade_no,
+			buyer_logon_id, buyer_pay_amount,send_pay_date,body,notify_status,notify_response,
+			create_time,update_time)
+			values
+			(#{userId},#{userName},#{roleId},#{roleName},#{serverId},#{subject},#{appId},#{goodsId},#{outTradeNo},#{totalAmount},#{tradeStatus},#{tradeNo},
+			#{buyerLogonId},#{buyerPayAmount},#{sendPayDate},#{body},#{notifyStatus},#{notifyResponse},now(),now())
+		</if>
+
+	</insert>
+
+	<update id="updatePay" parameterType="PayEntity">
+		update
+			pay_order
+		set
+			total_amount = #{totalAmount},
+			trade_status = #{tradeStatus},
+			trade_no = #{tradeNo},
+			buyer_logon_id = #{buyerLogonId},
+			buyer_pay_amount = #{buyerPayAmount},
+			notify_status = #{notifyStatus},
+			notify_response = #{notifyResponse},
+			send_pay_date = #{sendPayDate},
+			update_time = now()
+		where
+			out_trade_no = #{outTradeNo}
+	</update>
+
+	<update id="cancelPay" parameterType="java.lang.String">
+		update
+			pay_order
+		set
+			trade_status = "CANCEL_BUYER_PAY",
+			update_time = now()
+		where
+			out_trade_no = #{outTradeNo}
+	</update>
+
+	<delete id="deletePay" parameterType="java.lang.String">
+		delete from
+			pay_order
+		where
+			out_trade_no = #{outTradeNo}
+	</delete>
+</mapper>

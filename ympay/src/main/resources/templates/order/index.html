@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>充值订单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link type="text/css" th:href="@{/libs/mint-ui/style.css}"  rel="stylesheet">
+    <link type="text/css" th:href="@{/libs/bootstrap/bootstrap.min.css}"  rel="stylesheet">
+    <link type="text/css" th:href="@{/css/style.css}"  rel="stylesheet">
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <div class="container">
+            <mt-header fixed title="流水监控" class="mint-header-light">
+                <mt-button icon="back" @click.native="back();" slot="left"></mt-button>
+            </mt-header>
+            <div class="pay_log content" >
+                <ul
+                    class="pay_list"
+                    v-infinite-scroll="getList"
+                    infinite-scroll-disabled="disableScroll"
+                    infinite-scroll-distance="10">
+
+                    <!--数据列表-->
+                    <li class="card my-4"  v-for="(item,index) in items">
+                        <div class="px-3 py-3">
+                            <div class="d-flex flex-row">
+                                <div class="flex-fill" style="font-weight: bold;color:#222222">订单：{{item.subject}}</div>
+                                <div v-if="item.tradeStatus == 'WAIT_BUYER_PAY'">
+                                    <div class="text-success">等待支付</div>
+                                </div>
+                                <div v-else-if="item.tradeStatus == 'TRADE_SUCCESS'">
+                                    <div class="text-warning">支付成功</div>
+                                </div>
+                                <div v-else-if="item.tradeStatus == 'TRADE_CLOSED'">
+                                    <div>支付关闭</div>
+                                </div>
+                                <div v-else-if="item.tradeStatus == 'CANCEL_BUYER_PAY'">
+                                    <div>取消支付</div>
+                                </div>
+                                <div v-else>
+                                    <div>{{item.tradeStatus}}</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <div class="flex-fill color_red">¥ {{item.totalAmount}}</div>
+                                <div>{{item.createTime}}</div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <div class="flex-fill">订单号：{{item.outTradeNo}}</div>
+                                <div>用户名：{{item.userName}}</div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <div class="flex-fill">支付账号：{{item.buyerLogonId}}</div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <div class="flex-fill">更新时间：{{item.updateTime}}</div>
+                                <div>状态：{{item.notifyStatus=='1'?'成功':'失败'}}</div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                {{item.notifyResponse}}
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+                <div class="ym-list-footer d-flex flex-row" v-if="loading">加载中...</div>
+                <div class="ym-list-footer d-flex flex-row" v-if="noMore && items.length > 10">没有更多了</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript" th:src="@{/libs/vue/vue.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/libs/vue/request.js}"></script>
+<script type="text/javascript" th:src="@{/libs/bootstrap/bootstrap.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/libs/mint-ui/index.js}"></script>
+
+<script type="text/javascript" th:src="@{/libs/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/util.js}"></script>
+
+<script>
+
+    var pageNum = 1;
+
+    var app  = new Vue({
+        el: '#app',
+        data:{
+            items: [],
+            loading: false,
+            noMore: false,
+            disableScroll: false
+        },
+        methods: {
+
+            getList: function () {
+
+                var that = this;
+
+                this.loading = true;
+
+                get(that,"../../pay/queryAll",{
+                    'pageSize':10,'pageNum':pageNum
+                },function(res){
+                        console.log('success:', res);
+
+                        if(pageNum ==1 ){
+                            that.items = [];
+                        }
+
+                        if(res.items.length > 0 ){
+                            for(var i=0;i<res.items.length;i++){
+                                res.items[i].updateTime = res.items[i].updateTime.substring(0,19);
+                                that.items.push(res.items[i]);
+                            }
+                            pageNum += 1;
+
+                        }else{
+                            console.log("rows:0");
+                        }
+
+                        if(res.items.length < 10){
+                            that.noMore = true;
+                            that.disableScroll = true;
+                        }else{
+                            that.noMore = false;
+                            that.disableScroll = false;
+                        }
+
+                        that.loading = false;
+                },
+                function(res){
+
+                });
+            }
+
+        },
+        created: function () {
+
+        }
+    })
+
+</script>
+</html>

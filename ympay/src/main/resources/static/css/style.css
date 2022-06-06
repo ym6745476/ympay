@@ -1,0 +1,192 @@
+@charset "utf-8";
+body,h1,h2,h3,h4,h5,h6,dl,dt,dd,ul,ol,li,th,td,p,blockquote,pre,form,fieldset,legend,input,button,textarea,hr {margin:0;padding:0;}
+
+html{
+	margin:0;
+	padding:0;
+	height: 100%;
+}
+
+body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	background: #FFFFFF;
+	margin:0 0 0 0;
+	font-size:14px;
+	height: 100%;
+}
+
+
+/* 去除黑点 */
+ul,ol {list-style:none;}
+a{text-decoration:none; color:#333; font-size:12px;}
+a:link {color: #333; text-decoration:none;}
+a:hover{text-decoration:none; color:#FF9500; font-size:12px;}
+a:focus { outline: none; }
+
+em{ font-style:normal;}
+img{ border:0;}
+form,dt,dd,dl{ margin:0px; padding:0px;}
+input {vertical-align: middle}
+
+textarea {
+	height:25px;
+	background-color:#FFFFFF;
+	padding-left:10px;
+	padding:5px;
+	font-family: Arial;
+	font-size: 14px;
+	color:#666666;
+}
+
+[v-cloak] {
+	display: none;
+}
+
+/**mint ui 样式替换 */
+
+/**导航栏 */
+.mint-header-light{
+	background: #FF9500;
+	color: #FFFFFF;
+	font-size:14px;
+	height:45px;
+}
+
+.mint-header-title {
+	line-height: 40px;
+}
+
+.mint-button--normal{
+	font-size: 14px;
+}
+
+.mint-ui-toast{z-index: 999999;}
+
+.mint-field.is-textarea .mint-cell-value {
+	padding:0;
+}
+
+/** cell横线 **/
+.mint-cell:last-child{
+	background-image: none;
+}
+.mint-cell-wrapper {
+	background-image: none;
+	border-bottom: 1px solid #EFEFEF;
+	padding-left:12px;
+	padding-right:12px;
+}
+
+.mint-cell-value.is-link{
+	margin-right:0px;
+}
+
+/** 定义cell箭头图标 **/
+.mint-cell-allow-right::after {
+	border: 1px solid #999999;
+	border-bottom-width: 0;
+	border-left-width: 0;
+	content: " ";
+	top: 50%;
+	right: 20px;
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	-webkit-transform: translateY(-50%) rotate(45deg);
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.container{
+	/**不要删除用于总体控制的样式*/
+}
+
+.container .content{
+	padding-top: 45px;
+	background: #FFFFFF;
+}
+
+.pay_index .pay_amount{
+	color: #000000;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px;
+}
+
+.pay_index .pay_list{
+	width: 100%;
+}
+
+.pay_index .money{
+	color: #ed4014;
+	font-size: 16px;
+	padding: 10px;
+	font-weight: bold;
+}
+
+.pay_code{
+
+}
+
+.pay_code .pay_time{
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+
+.pay_code .pay_time .title{
+	color: #FF9500;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 10px;
+}
+
+.pay_code .pay_time .time{
+	color: #000000;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px;
+}
+
+.pay_code .order_info{
+	padding: 12px;
+}
+
+.pay_code .order_info .title{
+	color: #000000;
+	font-size: 15px;
+	font-weight: bold;
+	width:90px;
+}
+
+.pay_code .order_info .info{
+	color: #666666;
+	font-size: 16px;
+}
+
+/** 列表加载更多 */
+.pay_log .ym-list{
+
+}
+
+.pay_log .ym-list .item{
+	margin-top: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: #FFFFFF;
+}
+
+.pay_log .ym-list-footer{
+	font-size: 14px;
+	color: #555555;
+	height:40px;
+}
+
+.button_long{
+	width:96%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
