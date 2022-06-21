@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @MapperScan("com.ymbok.pay.dao")
 @ComponentScan("com.ymbok.pay")
-public class Application {
+public class PayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(PayApplication.class, args);
     }
 }
