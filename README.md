@@ -44,7 +44,7 @@ kill -9 pid
 http://pay.ymbok.com/pay?appId=1&userId=1 
 
 演示查看流水 
-http://pay.ymbok.com/pay/log 
+http://pay.ymbok.com/pay/order  
 
 
 ### Screenshot 
