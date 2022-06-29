@@ -36,20 +36,14 @@ nohup java -jar ympay-1.0.0.jar &
 ps -ef|grep java 
 kill -9 pid 
 
-### 访问地址 
+### 在线演示 
 
 官网：https://ymbok.com 
 
 演示支付地址： 
-http://pay.ymbok.com/pay?appId=1&userId=1 
+https://ymbok.com/pay/index?appId=1&userId=1&userName=18914491499&goodsId=999999
 
-演示查看流水 
-http://pay.ymbok.com/pay/order  
+演示查看订单
+http://ymbok.com/pay/order  
 
-
-### Screenshot 
-
-![图片说明](https://ymbok.com/static/ym_payment/screenshot/1.png "1.png")
-![图片说明](https://ymbok.com/static/ym_payment/screenshot/2.png "2.png")
-![图片说明](https://ymbok.com/static/ym_payment/screenshot/3.png "3.png")
 

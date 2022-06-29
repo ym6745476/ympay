@@ -126,13 +126,11 @@ public class PayController {
                 result.setResultCode(ApiResult.RESULT_OK);
                 payCodeEntity.setQrCode(aliResponse.getQrCode());
 
-                if("10027".equals(appId)){
-                    // 需要修改为运行机器上的路径
-                    String filePath = String.format("/www/wwwroot/bxcq/pay/qrcode/qr-%s.png",aliResponse.getOutTradeNo());
-                    log.info("filePath:" + filePath);
-                    ZxingUtil.getQrCodeImage(aliResponse.getQrCode(), 256, filePath);
-                    payCodeEntity.setQrCodeImage("http://g.ymbok.com/pay/qrcode/" + String.format("qr-%s.png",aliResponse.getOutTradeNo()));
-                }
+//                // 需要修改为运行机器上的路径
+//                String filePath = String.format("/www/wwwroot/ympay/qrcode/qr-%s.png",aliResponse.getOutTradeNo());
+//                log.info("filePath:" + filePath);
+//                ZxingUtil.getQrCodeImage(aliResponse.getQrCode(), 256, filePath);
+//                payCodeEntity.setQrCodeImage("/qrcode/" + String.format("qr-%s.png",aliResponse.getOutTradeNo()));
 
             }else{
                 result.setResultCode(ApiResult.RESULT_ERROR);
