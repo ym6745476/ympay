@@ -41,9 +41,7 @@ kill -9 pid
 官网：https://ymbok.com 
 
 演示支付地址： 
-https://ymbok.com/pay/index?appId=1&userId=1&userName=18914491499&goodsId=999999
+https://ymbok.com/pay/index?appId=1&userId=1&userName=test&goodsId=999999
 
-演示查看订单： 
-http://ymbok.com/pay/order  
 
 
